@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <script src="https://unpkg.com/react@15/dist/react.min.js"></script>
+    <script src="https://unpkg.com/react-dom@15/dist/react-dom.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.24.0/babel.js"></script>
+</head>
+<body>
+<div id="example"></div>
+
+<script type="text/babel">
+    class ShoppingTitle extends React.Component {
+        render() {
+            return (
+                <div>
+                    <h1>{this.props.title}</h1>
+                    <h2>{this.props.motto}</h2>
+                </div>
+            );
+        }
+    }
+
+    class ShoppingOptions extends React.Component {
+        render() {
+            return (
+                <div>
+                    <h2>{this.props.title}</h2>
+                    <div>
+                        {this.props.param1}
+                        <input type="checkbox" id="coding" name="interest" value="coding" checked="checked" />
+                    </div>
+
+                    <div>
+                        <p>Select Type
+                            <select>
+                                <option value="All" selected="selected">{this.props.types[0]}</option>
+                                <option value="Cars">{this.props.types[1]}</option>
+                                <option value="Trucks">{this.props.types[2]}</option>
+                                <option value="Convertibles">{this.props.types[3]}</option>
+                            </select>
+                        </p>
+                    </div>
+                </div>
+                );
+        }
+    }
+
+    class UlItems extends React.Component {
+        render() {
+            return (
+                <ul>
+                    <table>
+                        <tbody>
+                        <tr>
+                            <th>{this.props.params[0]}</th>
+                            <th>{this.props.params[1]}</th>
+                            <th>{this.props.params[2]}</th>
+                            <th>{this.props.params[3]}</th>
+                        </tr>
+                        <tr>
+                        </tr>
+                        <tr>
+                            <td>{this.props.data[0]}</td>
+                            <td>{this.props.data[1]}</td>
+                            <td>{this.props.data[2]}</td>
+                            <td>
+                                <button>Buy Now</button>
+                            </td>
+                        </tr>
+                        <tr>
+                        </tr>
+                        </tbody>
+                    </table>
+                </ul>
+                );
+        }
+    }
+
+    class CarModels extends React.Component {
+        render() {
+            return (
+                <div>
+                    <h2>Cars</h2>
+                    <UlItems params = {["Year", "Model", "Price", "Buy"]}
+                             data = {["2013", "A", "$32000"]}/>
+
+                    <UlItems params = {["Year", "Model", "Price", "Buy"]}
+                             data = {["2011", "B", "$4400" ]}/>
+
+                    <UlItems params = {["Year", "Model", "Price", "Buy"]}
+                             data = {["2016", "B", "$15500" ]}/>
+                </div>
+                );
+        }
+    }
+
+    class CarModels extends React.Component {
+        render() {
+            return (
+                <div>
+                    <h2>Cars</h2>
+                    <UlItems params = {["Year", "Model", "Price", "Buy"]}
+                             data = {["2013", "A", "$32000"]}/>
+
+                    <UlItems params = {["Year", "Model", "Price", "Buy"]}
+                             data = {["2011", "B", "$4400" ]}/>
+
+                    <UlItems params = {["Year", "Model", "Price", "Buy"]}
+                             data = {["2016", "B", "$15500" ]}/>
+                </div>
+                );
+        }
+    }
+
+    class ShoppingApp extends React.Component {
+        render() {
+            return (
+                <div>
+                    <ShoppingTitle title = "Welcome to React Transportation"
+              motto = "The best place to buy vehicles online"/>
+
+                    <ShoppingOptions title = "Choose Options"
+              param1 = "New Only" types = {["All", "Cars", "Trucks", "Convertibles"]}/>
+
+                    <CarModels/>
+
+                </div>
+            );
+        }
+    }
+
+    const place = document.getElementById("example")
+    ReactDOM.render(
+        <ShoppingApp/>,
+        place
+    );
+</script>
+</body>
+</html>

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <script src="https://unpkg.com/react@15/dist/react.min.js"></script>
+    <script src="https://unpkg.com/react-dom@15/dist/react-dom.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.24.0/babel.js"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+    const InputFieldComponent = (props) => {
+        return (
+            <div>
+                <div>{props.label}</div>
+                <input style={{width: '150px', height: '25px'}} value={props.value} onChange={props.onChange}
+                       type='text'/>
+            </div>
+        )
+    }
+
+    const SelectComponent = (props) => {
+        return (
+            <div>
+                <div>Select Activity</div>
+                <select style={{width: '160px', height: '30px'}} value={props.activity} onChange={props.onChange}>
+                    <option value="Science Lab">Science Lab</option>
+                    <option value="Swimming">Swimming</option>
+                    <option value="Cooking">Cooking</option>
+                    <option value="Painting">Painting</option>
+                </select>
+            </div>
+        )
+    }
+
+
+    const TableComponent = (props) => {
+        return (
+            <table>
+                <tbody>
+                <tr>
+                    <th>Remove</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Activity</th>
+                    <th>Restrictions</th>
+                </tr>
+                {console.log("props.items", props.items)}
+
+                {props.items.map((item, index) =>
+                    <tr key={index}>
+                        <th>
+                            <button onClick={() => props.removeItem(index)}>x</button>
+                        </th>
+                        <th>{item.firstName}</th>
+                        <th>{item.lastName}</th>
+                        <th>{item.activity}</th>
+                        <th>{item.restriction}</th>
+                    </tr>)}
+                </tbody>
+            </table>
+        )
+    }
+
+    class App extends React.Component {
+        constructor(props) {
+            super(props)
+
+            this.state = {
+                            diet: false,
+                            phys: false,
+                            med: false,
+                            firstName: '',
+                            lastName: '',
+                            activity: 'Science Lab',
+                            restrictions: ['a) Dietary Restrictions', 'b) Physical Disabilities', 'c) Medical Needs'],
+                            restriction: [],
+
+                            items: []
+                          }
+        }
+
+        handleChange(event) {
+            this.setState({value: event.target.value})
+            console.log(this.state.value)
+        }
+
+        onChangeFirstName = (event) => {
+            this.setState({
+                firstName: event.target.value
+            })
+            console.log(this.state.firstName)
+        }
+
+        onChangeLastName = (event) => {
+            this.setState({
+                lastName: event.target.value
+            })
+        }
+
+        selectChange = (event) => {
+            this.setState({
+                activity: event.target.value
+            })
+        }
+
+        checkboxChange = (event, index) => {
+
+            this.setState({
+                [event.target.name]: event.target.checked
+            })
+            let restrictionCopy = this.state.restriction.slice();
+            console.log(index)
+            console.log(event.target.checked)
+
+            if (event.target.checked) {
+                this.setState({
+                    restriction: restrictionCopy.concat(event.target.value[0]),
+
+                })
+            } else {
+                this.setState({
+                    restriction: restrictionCopy.splice(index, 0),
+
+                })
+            }
+
+        }
+
+        addItem = () => {
+
+            var itemsCopy = this.state.items;
+            itemsCopy.push({
+                "firstName": this.state.firstName,
+                "lastName": this.state.lastName,
+                "activity": this.state.activity,
+                "restriction": this.state.restriction
+            })
+            console.log("items", itemsCopy)
+
+            this.setState({items: itemsCopy, firstName: '',
+                           lastName: '',
+                           activity: 'Science Lab',
+                           restriction: "",
+                           diet: false,
+                           phys: false,
+                           med: false
+            })
+            console.log("added items", this.state.items)
+        }
+
+        //  = (index) => - save a state of your changes when sho it with other function
+        removeItem = (index) => {
+            var itemsCopy = this.state.items
+            itemsCopy.splice(index, 1);
+
+            this.setState({items: itemsCopy})
+        }
+
+        render() {
+            return (
+                <div>
+                    <InputFieldComponent value={this.state.firstName} onChange={this.onChangeFirstName}
+                                         label="First Name"/>
+                    <InputFieldComponent value={this.state.lastName} onChange={this.onChangeLastName}
+                                         label="Last Name"/>
+                    <SelectComponent activity={this.state.activity} onChange={this.selectChange} />
+
+                    <div>Check all that apply:</div>
+                    <div>
+
+
+                        <input checked={this.state.diet} name='diet' type="checkbox" value='a'
+                               onChange={this.checkboxChange}/>
+                        <label>a) Dietary Restriction</label>
+                        <br/>
+
+                        <input checked={this.state.phys} name='phys' type="checkbox" value='b'
+                               onChange={this.checkboxChange}/>
+                        <label>b) Physical Disabilities</label>
+                        <br/>
+                        <input checked={this.state.med} name='med' type="checkbox" value='c'
+                               onChange={this.checkboxChange}/>
+
+                        <label>c) Medical Needs</label>
+
+                    </div>
+                    <button onClick={() => this.addItem()}>Submit</button>
+                    <TableComponent items={this.state.items} removeItem={this.removeItem}/>
+
+                </div>
+            )
+        }
+    }
+
+    ReactDOM.render(
+        <App/>,
+        document.getElementById("root")
+    )
+</script>
+</body>
+</html>

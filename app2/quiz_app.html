@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <script src="https://unpkg.com/react@15/dist/react.min.js"></script>
+    <script src="https://unpkg.com/react-dom@15/dist/react-dom.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.24.0/babel.js"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+    function QuestionOptions(props){
+            return (
+                <div>
+                    <QuestionOption answ={props.opt[0]} clickHandler={props.clickHandler}/>
+                    <QuestionOption answ={props.opt[1]} clickHandler={props.clickHandler}/>
+                    <QuestionOption answ={props.opt[2]} clickHandler={props.clickHandler}/>
+                    <QuestionOption answ={props.opt[3]} clickHandler={props.clickHandler}/>
+                </div>
+            )
+        }
+
+    function QuestionOption(props){
+            return (
+                <div>
+                    <button onClick={() => props.clickHandler(props.answ)}
+                            className="option"> {props.answ}
+                    </button>
+                </div>
+            )
+        }
+
+    function QuestionTitle(props){
+            return (
+                <h2>What is {props.question}</h2>
+            )
+        }
+
+    function CorrectAnsw(props){
+            return (
+                <p>Correct answers: {props.numCorrect}</p>
+            )
+        }
+
+    function IncorrectAnsw(props){
+            return (
+                <p>Incorrect answers: {props.numIncorrect}</p>
+            )
+        }
+
+    class App extends React.Component {
+        constructor(props) {
+            super(props)
+            this.state = {correct: 0, number: 0,
+                          incorrect: 0}
+            this.clickHandler = this.clickHandler.bind(this)
+        }
+
+        restart() {
+            this.setState({number: 0, correct: 0, incorrect: 0})
+        }
+
+        clickHandler(option) {
+            if (option == this.ans[this.state.number]){
+                this.setState({
+                               correct: this.state.correct + 1, incorrect: this.state.incorrect,
+                               number:this.state.number + 1})
+            }
+            else {
+                this.setState({
+                    correct: this.state.correct, incorrect: this.state.incorrect + 1,
+                    number: this.state.number + 1
+                })
+            }
+        }
+
+        render() {
+            this.ques = ["the capital of the USA", "11 x 3", "6 x 4", "4 x 7",
+                "6 x 7", "8 x 8", "13 x 12", "9 x 3", "11 x 12", "1 x 1"]
+            this.ans = ["Washington", 33, 24, 28, 42, 64, 156, 27, 121, 1]
+            this.opts = [["Rio", "New York", "Denver", "Washington"], [3, 4, 33, 5], [6, 24, 7, 8], [28, 9, 10, 11], [12, 13, 14, 42],
+                [15, 16, 64, 17], [18, 156, 19, 20], [27, 21, 22, 23], [24, 25, 26, 121], [27, 28, 1, 29]]
+
+            return this.state.number < 2 ? (
+                <div>
+                    <QuestionTitle question={this.ques[this.state.number]}/>
+                    <QuestionOptions opt={this.opts[this.state.number]} clickHandler={this.clickHandler}/>
+                    <CorrectAnsw numCorrect={this.state.correct}/>
+                    <IncorrectAnsw numIncorrect={this.state.incorrect}/>
+                </div>
+            ) : (
+                <div>
+                    <p className="score">{"Score: " + this.state.correct + "/10"}</p>
+                    <button onClick={() => this.restart()}>Restart</button>
+                </div>
+            )
+        }
+    }
+
+    ReactDOM.render(
+        <App/>,
+        document.getElementById("root")
+    )
+</script>
+</body>
+</html>
